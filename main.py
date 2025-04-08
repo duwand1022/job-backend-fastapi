@@ -2,11 +2,24 @@ from fastapi import FastAPI, HTTPException, status, Query
 from models import JobCreate, Job, SortField, SortOrder
 from database import db
 from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Job Listing API",
     description="API for managing job listings with pagination, sorting and filtering",
     version="1.0.0"
+)
+
+origins = [
+    "http://localhost:5173",  # Or your actual frontend origin
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins (unsafe for production)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.post("/jobs/", response_model=Job, status_code=status.HTTP_201_CREATED)
